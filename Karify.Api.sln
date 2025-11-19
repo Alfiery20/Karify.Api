@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0FB70D7B-BE1F-4999-AA71-08FDE4220FE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karify.Application", "Karify.Application\Karify.Application.csproj", "{292E73CC-7965-44EA-A330-E24338FD2314}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{79129BFA-316B-461D-9FC3-C8F66D3D8BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karify.Infrastructure", "Karify.Infrastructure\Karify.Infrastructure.csproj", "{1235AEFE-7CA5-4C49-8DCB-C45699A6A684}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karify.Persistence", "Karify.Persistence\Karify.Persistence.csproj", "{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karify.Api", "Karify.Api\Karify.Api.csproj", "{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{292E73CC-7965-44EA-A330-E24338FD2314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{292E73CC-7965-44EA-A330-E24338FD2314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{292E73CC-7965-44EA-A330-E24338FD2314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{292E73CC-7965-44EA-A330-E24338FD2314}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1235AEFE-7CA5-4C49-8DCB-C45699A6A684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1235AEFE-7CA5-4C49-8DCB-C45699A6A684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1235AEFE-7CA5-4C49-8DCB-C45699A6A684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1235AEFE-7CA5-4C49-8DCB-C45699A6A684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{292E73CC-7965-44EA-A330-E24338FD2314} = {0FB70D7B-BE1F-4999-AA71-08FDE4220FE6}
+		{1235AEFE-7CA5-4C49-8DCB-C45699A6A684} = {79129BFA-316B-461D-9FC3-C8F66D3D8BC1}
+		{60DC8CEE-4C34-4CD1-AB52-AEDB12A41515} = {79129BFA-316B-461D-9FC3-C8F66D3D8BC1}
+		{FC88BDF8-E22D-404E-A06F-09A8B9C5F2B4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CA45092-1782-4EC4-B460-A6A1BEF00437}
+	EndGlobalSection
+EndGlobal

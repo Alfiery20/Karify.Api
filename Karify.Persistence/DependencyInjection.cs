@@ -1,0 +1,18 @@
+﻿using Karify.Application.Common.Interface;
+using Karify.Persistence.Database;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Karify.Persistence
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddPersistenceLayer(this IServiceCollection services, string connectionString)
+        {
+            services.AddTransient<IDataBase>(sp => new SqlDataBase(connectionString));
+
+            //services.AddSingleton<IAutenticacionRepository, AutenticacionRepository>();
+
+            return services;
+        }
+    }
+}
