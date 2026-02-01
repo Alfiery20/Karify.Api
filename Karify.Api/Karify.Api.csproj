@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Karify.Persistence\Karify.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

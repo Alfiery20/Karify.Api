@@ -1,5 +1,7 @@
 ﻿using Karify.Application.Common.Interface;
+using Karify.Application.Common.Interface.Repositories;
 using Karify.Persistence.Database;
+using Karify.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Karify.Persistence
@@ -10,7 +12,8 @@ namespace Karify.Persistence
         {
             services.AddTransient<IDataBase>(sp => new SqlDataBase(connectionString));
 
-            //services.AddSingleton<IAutenticacionRepository, AutenticacionRepository>();
+            services.AddSingleton<IAutenticacionRepository, AutenticacionRepository>();
+            services.AddSingleton<IDatosMaestrosRepository, DatosMaestrosRepository>();
 
             return services;
         }

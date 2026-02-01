@@ -16,6 +16,7 @@ namespace Karify.Infrastructure
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<ICryptography, Cryptography>();
+            services.AddSingleton<IGoogleService, GoogleService>();
             return services;
         }
     }
