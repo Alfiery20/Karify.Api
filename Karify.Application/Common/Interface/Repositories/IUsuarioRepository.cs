@@ -1,4 +1,5 @@
-﻿using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
+﻿using Karify.Application.Usuario.Command.ActualizarInformacion;
+using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Karify.Application.Common.Interface.Repositories
     public interface IUsuarioRepository
     {
         Task<ObtenerInformacionUsuarioQueryDTO> ObtenerInformacionPersonal(ObtenerInformacionUsuarioQuery query);
+        Task<ActualizarInformacionCommandDTO> ActualizarInformacionPersonal(ActualizarInformacionCommand command);
     }
 }

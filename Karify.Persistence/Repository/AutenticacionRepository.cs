@@ -57,7 +57,7 @@ namespace Karify.Persistence.Repository
                             NombreEscuela = Convert.IsDBNull(reader["NOMBRE_ESCUELA"]) ? string.Empty : reader["NOMBRE_ESCUELA"].ToString(),
                             IdFacultad = Convert.IsDBNull(reader["ID_FACULTAD"]) ? 0 : Convert.ToInt32(reader["ID_FACULTAD"].ToString()),
                             NombreFacultad = Convert.IsDBNull(reader["NOMBRE_FACULTAD"]) ? string.Empty : reader["NOMBRE_FACULTAD"].ToString(),
-                            LLenarPerfil = Convert.IsDBNull(reader["ES_NECESARIO_LLENAR"]) ? false : Convert.ToBoolean(reader["ES_NECESARIO_LLENAR"].ToString()),
+                            LlenarPerfil = Convert.IsDBNull(reader["ES_NECESARIO_LLENAR"]) ? false : Convert.ToBoolean(reader["ES_NECESARIO_LLENAR"].ToString()),
                             IdRol = Convert.IsDBNull(reader["ID_ROL"]) ? 0 : Convert.ToInt32(reader["ID_ROL"].ToString()),
                             Rol = Convert.IsDBNull(reader["ROL"]) ? string.Empty : reader["ROL"].ToString(),
                         };
