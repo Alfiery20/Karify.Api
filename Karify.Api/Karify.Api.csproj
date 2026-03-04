@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Karify.Persistence\Karify.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

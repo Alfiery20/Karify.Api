@@ -90,7 +90,7 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
                 new Claim("nombreEscuela", command.NombreEscuela ?? ""),
                 new Claim("idFacultad", command.IdFacultad.ToString() ?? ""),
                 new Claim("nombreFacultad", command.NombreFacultad ?? ""),
-                new Claim("esNecesarioLlenar", command.LLenarPerfil.ToString() ?? ""),
+                new Claim("esNecesarioLlenar", command.LlenarPerfil.ToString() ?? ""),
                 new Claim("idRol", command.IdRol.ToString() ?? ""),
                 new Claim("rol", command.Rol ?? "")
             };

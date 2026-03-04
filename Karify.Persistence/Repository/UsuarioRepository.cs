@@ -3,6 +3,7 @@ using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
+using Karify.Application.Usuario.Command.ActualizarInformacion;
 using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
 using Karify.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +55,36 @@ namespace Karify.Persistence.Repository
                     }
                 }
                 return informacionPersonal;
+            }
+        }
+
+        public async Task<ActualizarInformacionCommandDTO> ActualizarInformacionPersonal(ActualizarInformacionCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdUsuario", command.IdUsuario, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pCodigoUniversitario", command.CodigoUniversitario, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pTipoDocumento", command.TipoDocumento, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pNumeroDocumento", command.NumeroDocumento, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pApellidoPaterno", command.ApellidoPaterno, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pApellidoMaterno", command.ApellidoMaterno, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pTelefono", command.Telefono, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pEscuela", command.IdEscuela, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_ActualizarDatosUsuario]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                var mensaje = parameters.Get<string>("msj");
+                return new ActualizarInformacionCommandDTO()
+                {
+                    Mensaje = mensaje
+                };
             }
         }
     }

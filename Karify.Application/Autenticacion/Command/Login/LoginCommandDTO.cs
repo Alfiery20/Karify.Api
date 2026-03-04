@@ -22,7 +22,7 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
         public string NombreEscuela { get; set; }
         public int IdFacultad { get; set; }
         public string NombreFacultad { get; set; }
-        public bool LLenarPerfil { get; set; }
+        public bool LlenarPerfil { get; set; }
         public int IdRol { get; set; }
         public string Rol { get; set; }
         public Menu[] Menus { get; set; }
