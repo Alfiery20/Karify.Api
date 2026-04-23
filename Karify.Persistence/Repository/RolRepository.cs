@@ -2,6 +2,7 @@
 using Dapper;
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
+using Karify.Application.Common.Utils;
 using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.Rol.Command.AgregarRol;
 using Karify.Application.Rol.Command.EditarRol;
@@ -60,6 +61,7 @@ namespace Karify.Persistence.Repository
 
                 parameters.Add("@pid", command.IdRol, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pPermiso", ConvertXMLMapper.ConvertirPermisosAXml(command.Permisos), DbType.String, ParameterDirection.Input);
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
 
                 using var reader = await cnx.ExecuteReaderAsync(
