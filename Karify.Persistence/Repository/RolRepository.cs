@@ -39,6 +39,7 @@ namespace Karify.Persistence.Repository
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pPermiso", ConvertXMLMapper.ConvertirPermisosAXml(command.Permisos), DbType.Xml, ParameterDirection.Input);
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
 
                 using var reader = await cnx.ExecuteReaderAsync(
