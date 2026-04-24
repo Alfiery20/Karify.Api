@@ -1,4 +1,4 @@
-﻿using Karify.Application.Rol.Command.EditarRol;
+﻿using Karify.Application.Rol.Command.AgregarRol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
