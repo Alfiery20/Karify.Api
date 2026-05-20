@@ -3,14 +3,10 @@ using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
+using Karify.Application.DatosMaestros.Query.ObtenerProfesor;
 using Karify.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Persistence.Repository
 {
@@ -72,6 +68,34 @@ namespace Karify.Persistence.Repository
                     }
                 }
                 return escuelas;
+            }
+        }
+
+        public async Task<IEnumerable<ObtenerProfesorQueryDMDTO>> ObtenerProfesorPorEscuela(ObtenerProfesorDMQuery query)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                List<ObtenerProfesorQueryDMDTO> profesores = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdEscuela", query.IdEscuela, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pNombre", query.Nombre, DbType.String, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_ObtenerProfesor]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        profesores.Add(new ObtenerProfesorQueryDMDTO()
+                        {
+                            Codigo = Convert.IsDBNull(reader["CODIGO"]) ? 0 : Convert.ToInt32(reader["CODIGO"].ToString()),
+                            Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString()
+                        });
+                    }
+                }
+                return profesores;
             }
         }
     }

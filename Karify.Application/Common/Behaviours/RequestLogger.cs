@@ -1,11 +1,6 @@
 ﻿using Karify.Application.Common.Interface;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Application.Common.Behaviours
 {

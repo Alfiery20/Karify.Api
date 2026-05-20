@@ -17,6 +17,7 @@ namespace Karify.Persistence
             services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
             services.AddSingleton<IProyectoRepository, ProyectoRepository>();
             services.AddSingleton<IRolRepository, RolRepository>();
+            services.AddSingleton<IProfesorRepository, ProfesorRepository>();
 
             return services;
         }

@@ -1,8 +1,6 @@
 ﻿using Dapper;
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
-using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
-using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
 using Karify.Application.Usuario.Command.ActualizarInformacion;
 using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
 using Karify.Persistence.Database;

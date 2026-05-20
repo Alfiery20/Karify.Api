@@ -3,11 +3,6 @@ using Karify.Application.Rol.Command.EditarRol;
 using Karify.Application.Rol.Command.EliminarRol;
 using Karify.Application.Rol.Query.ObtenerRol;
 using Karify.Application.Rol.Query.VerRol;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Application.Common.Interface.Repositories
 {

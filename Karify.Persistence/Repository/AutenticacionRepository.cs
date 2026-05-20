@@ -5,12 +5,7 @@ using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Persistence.Repository
 {

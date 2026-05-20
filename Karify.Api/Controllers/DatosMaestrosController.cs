@@ -1,6 +1,6 @@
-﻿using Karify.Application.Autenticacion.Command.LoginGoogle;
-using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
+﻿using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
+using Karify.Application.DatosMaestros.Query.ObtenerProfesor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +28,19 @@ namespace Karify.Api.Controllers
             var response = await Mediator.Send(new ObtenerEscuelaQuery()
             {
                 IdFacultad = idFacultad
+            });
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("obtenerProfesor/{nombre}")]
+        [ProducesResponseType(typeof(ObtenerProfesorQueryDMDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ObtenerProfesor(string nombre)
+        {
+            var response = await Mediator.Send(new ObtenerProfesorDMQuery()
+            {
+                Nombre = nombre,
+                IdEscuela = this.CurrentUser.IdEscuela
             });
             return Ok(response);
         }

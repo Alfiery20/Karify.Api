@@ -1,23 +1,15 @@
-﻿using Azure;
-using Dapper;
+﻿using Dapper;
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.Common.Utils;
-using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.Rol.Command.AgregarRol;
 using Karify.Application.Rol.Command.EditarRol;
 using Karify.Application.Rol.Command.EliminarRol;
 using Karify.Application.Rol.Query.ObtenerRol;
 using Karify.Application.Rol.Query.VerRol;
-using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
 using Karify.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Persistence.Repository
 {

@@ -1,17 +1,13 @@
 ﻿using Dapper;
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
-using Karify.Application.Common.Utils;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
-using Karify.Application.Rol.Command.AgregarRol;
+using Karify.Application.Proyecto.Command.EditarProyecto;
+using Karify.Application.Proyecto.Query.ObtenerProyecto;
+using Karify.Application.Proyecto.Query.VerProyecto;
 using Karify.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Persistence.Repository
 {
@@ -51,6 +47,89 @@ namespace Karify.Persistence.Repository
 
                 response.Mensaje = parameters.Get<string>("msj");
 
+                return response;
+            }
+        }
+
+        public async Task<EditarProyectoCommandDTO> EditarProyecto(EditarProyectoCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                EditarProyectoCommandDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdProyecto", command.IdProyecto, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pDescripcion", command.Descripcion, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pIdProfesor", command.IdProfesor, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_EditarProyecto]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                response.Mensaje = parameters.Get<string>("msj");
+
+                return response;
+            }
+        }
+
+        public async Task<IEnumerable<ObtenerProyectoQueryDTO>> ObtenerProyecto(ObtenerProyectoQuery query)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                List<ObtenerProyectoQueryDTO> proyectos = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pNombre", query.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pIdAlumno", query.Nombre, DbType.String, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_ObtenerProyecto]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        proyectos.Add(new ObtenerProyectoQueryDTO()
+                        {
+                            Id = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString()),
+                            Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString(),
+                            Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString(),
+                            Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? "" : reader["PROFESOR"].ToString(),
+                            FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"])
+                        });
+                    }
+                }
+                return proyectos;
+            }
+        }
+
+        public async Task<VerProyectoQueryDTO> VerProyecto(VerProyectoQuery query)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                VerProyectoQueryDTO response = new VerProyectoQueryDTO();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdProyecto", query.IdProyecto, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_VerProyecto]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        var prueba = reader["ESTADO"].ToString();
+                        response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
+                        response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
+                        response.Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
+                        response.Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? 0 : Convert.ToInt32(reader["PROFESOR"].ToString());
+                        response.FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"]);
+                    }
+                }
                 return response;
             }
         }

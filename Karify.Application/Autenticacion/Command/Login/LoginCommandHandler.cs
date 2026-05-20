@@ -2,13 +2,8 @@
 using Karify.Application.Common.Interface.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Karify.Application.Autenticacion.Command.LoginGoogle
 {

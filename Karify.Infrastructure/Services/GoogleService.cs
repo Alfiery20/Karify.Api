@@ -1,10 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Karify.Application.Autenticacion.Command.LoginGoogle;
+﻿using Karify.Application.Autenticacion.Command.LoginGoogle;
 using Karify.Application.Common.Interface;
-using Microsoft.Extensions.Logging;
+using System.Net.Http.Headers;
 
 namespace Karify.Infrastructure.Services
 {

@@ -1,6 +1,5 @@
 ﻿using Karify.Api.Filter;
 using Karify.Application.Usuario.Command.ActualizarInformacion;
-using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Karify.Api.Controllers

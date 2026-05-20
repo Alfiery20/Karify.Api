@@ -1,5 +1,4 @@
 using Autofac.Extensions.DependencyInjection;
-using Karify.Api;
 using Karify.Api.Utils;
 using Serilog;
 

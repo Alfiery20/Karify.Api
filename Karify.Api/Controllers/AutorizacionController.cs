@@ -1,7 +1,5 @@
 ﻿using Karify.Api.Filter;
-using Karify.Application.Autenticacion.Command.LoginGoogle;
 using Karify.Application.Usuario.Query.ObtenerInformacionUsuario;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Karify.Api.Controllers

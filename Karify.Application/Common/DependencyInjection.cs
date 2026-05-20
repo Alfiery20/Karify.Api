@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Karify.Application.Common.Behaviours;
+﻿using Karify.Application.Common.Behaviours;
 using Karify.Application.Common.Settings;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Karify.Application.Common
 {

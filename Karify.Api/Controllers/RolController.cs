@@ -4,13 +4,13 @@ using Karify.Application.Rol.Command.EditarRol;
 using Karify.Application.Rol.Command.EliminarRol;
 using Karify.Application.Rol.Query.ObtenerRol;
 using Karify.Application.Rol.Query.VerRol;
-using Karify.Application.Usuario.Command.ActualizarInformacion;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Karify.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class RolController : AbstractController
     {
         [HttpGet]

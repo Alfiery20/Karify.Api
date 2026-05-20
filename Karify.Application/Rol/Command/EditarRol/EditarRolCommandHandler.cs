@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using Karify.Application.Common.Interface.Repositories;
+﻿using Karify.Application.Common.Interface.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karify.Application.Rol.Command.EditarRol
 {
