@@ -11,7 +11,7 @@ namespace Karify.Api.ContProfesorlers
     [Route("api/[controller]")]
     [ApiController]
     [ServiceFilter(typeof(AuthorizationFilter))]
-    public class ProfesorContProfesorler : AbstractController
+    public class ProfesorController : AbstractController
     {
         [HttpPost]
         [Route("obtenerProfesor")]
