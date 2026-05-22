@@ -29,7 +29,7 @@ namespace Karify.Persistence.Repository
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@pemail", command.Nombre, DbType.String, ParameterDirection.Input);
-                parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pNombre", command.Emeal, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoPaterno", command.ApellidoPaterno, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoMaterno", command.ApellidoMaterno, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pidRol", command.IdRol, DbType.String, ParameterDirection.Input);
