@@ -18,7 +18,9 @@ namespace Karify.Application.Profesor.Command.EliminarProfesor
         }
         public Task<EliminarProfesorCommandDTO> Handle(EliminarProfesorCommand request, CancellationToken cancellationToken)
         {
+            this._logger.LogInformation("Iniciando proceso de eliminar profesor handler {handler}", GetType().Name);
             var response = this._profesorRepository.EliminarProfesor(request);
+            this._logger.LogInformation("Finalizando proceso de eliminar profesor handler {handler}", GetType().Name);
             return response;
         }
     }

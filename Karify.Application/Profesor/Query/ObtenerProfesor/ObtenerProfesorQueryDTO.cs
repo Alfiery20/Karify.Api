@@ -14,6 +14,7 @@
         public string Correo { get; set; }
         public string Facultad { get; set; }
         public string Escuela { get; set; }
+        public string Rol { get; set; }
         public bool CompletarPerfil { get; set; }
     }
 }

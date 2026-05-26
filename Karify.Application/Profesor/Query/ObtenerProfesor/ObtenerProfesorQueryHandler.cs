@@ -18,7 +18,9 @@ namespace Karify.Application.Profesor.Query.ObtenerProfesor
         }
         public Task<IEnumerable<ObtenerProfesorQueryDTO>> Handle(ObtenerProfesorQuery request, CancellationToken cancellationToken)
         {
+            this._logger.LogInformation("Iniciando proceso de obtener profesor handler {handler}", GetType().Name);
             var response = this._profesorRepository.ObtenerProfesor(request);
+            this._logger.LogInformation("Finalizando proceso de obtener profesor handler {handler}", GetType().Name);
             return response;
         }
     }

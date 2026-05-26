@@ -27,7 +27,7 @@ namespace Karify.Persistence.Repository
                 List<ObtenerFacultadQueryDTO> facultades = new();
 
                 using (var reader = await cnx.ExecuteReaderAsync(
-                    "[dbo].[usp_ObtenerFacultad]",
+                    "[dbo].[usp_DM_ObtenerFacultad]",
                     commandType: CommandType.StoredProcedure))
                 {
                     while (reader.Read())
@@ -54,7 +54,7 @@ namespace Karify.Persistence.Repository
                 parameters.Add("@pIdFacultad", query.IdFacultad, DbType.Int32, ParameterDirection.Input);
 
                 using (var reader = await cnx.ExecuteReaderAsync(
-                    "[dbo].[usp_ObtenerEscuela]",
+                    "[dbo].[usp_DM_ObtenerEscuela]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure))
                 {
@@ -78,11 +78,10 @@ namespace Karify.Persistence.Repository
                 List<ObtenerProfesorQueryDMDTO> profesores = new();
                 DynamicParameters parameters = new DynamicParameters();
 
-                parameters.Add("@pIdEscuela", query.IdEscuela, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pNombre", query.Nombre, DbType.String, ParameterDirection.Input);
 
                 using (var reader = await cnx.ExecuteReaderAsync(
-                    "[dbo].[usp_ObtenerProfesor]",
+                    "[dbo].[usp_DM_ObtenerProfesor]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure))
                 {

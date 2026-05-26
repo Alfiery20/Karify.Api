@@ -18,7 +18,9 @@ namespace Karify.Application.Profesor.Command.AgregarProfesor
         }
         public Task<AgregarProfesorCommandDTO> Handle(AgregarProfesorCommand request, CancellationToken cancellationToken)
         {
+            this._logger.LogInformation("Iniciando proceso de agregar profesor handler {handler}", GetType().Name);
             var response = this._profesorRepository.AgregarProfesor(request);
+            this._logger.LogInformation("Finalizando proceso de agregar profesor handler {handler}", GetType().Name);
             return response;
         }
     }

@@ -2,6 +2,7 @@
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.Profesor.Command.AgregarProfesor;
+using Karify.Application.Profesor.Command.EditarProfesor;
 using Karify.Application.Profesor.Command.EliminarProfesor;
 using Karify.Application.Profesor.Query.ObtenerProfesor;
 using Karify.Application.Profesor.Query.VerProfesor;
@@ -32,12 +33,39 @@ namespace Karify.Persistence.Repository
                 parameters.Add("@pNombre", command.Emeal, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoPaterno", command.ApellidoPaterno, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoMaterno", command.ApellidoMaterno, DbType.String, ParameterDirection.Input);
-                parameters.Add("@pidRol", command.IdRol, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pidRol", command.IdRol, DbType.Int32, ParameterDirection.Input);
 
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
 
                 using var reader = await cnx.ExecuteReaderAsync(
                     "[dbo].[usp_AgregarProfesor]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                response.Mensaje = parameters.Get<string>("msj");
+
+                return response;
+            }
+        }
+
+        public async Task<EditarProfesorCommandDTO> EditarProfesor(EditarProfesorCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                EditarProfesorCommandDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProfesor", command.IdProfesor, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pemail", command.Emeal, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pApellidoPaterno", command.ApellidoPaterno, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pApellidoMaterno", command.ApellidoMaterno, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pidRol", command.IdRol, DbType.Int32, ParameterDirection.Input);
+
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_EditarProfesor]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
 
@@ -100,6 +128,7 @@ namespace Karify.Persistence.Repository
                             Correo = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString(),
                             Facultad = Convert.IsDBNull(reader["FACULTAD"]) ? "" : reader["FACULTAD"].ToString(),
                             Escuela = Convert.IsDBNull(reader["ESCUELA"]) ? "" : reader["ESCUELA"].ToString(),
+                            Rol = Convert.IsDBNull(reader["ROL"]) ? "" : reader["ROL"].ToString(),
                             CompletarPerfil = Convert.IsDBNull(reader["COMPLETAR_PERFIL"]) ? false : Convert.ToBoolean(reader["COMPLETAR_PERFIL"]),
                             Estado = Convert.IsDBNull(reader["ESTADO"]) ? false : Convert.ToBoolean(reader["ESTADO"])
                         });
@@ -136,6 +165,7 @@ namespace Karify.Persistence.Repository
                         response.Correo = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
                         response.Facultad = Convert.IsDBNull(reader["FACULTAD"]) ? 0 : Convert.ToInt32(reader["FACULTAD"].ToString());
                         response.Escuela = Convert.IsDBNull(reader["ESCUELA"]) ? 0 : Convert.ToInt32(reader["ESCUELA"].ToString());
+                        response.Rol = Convert.IsDBNull(reader["ROL"]) ? 0 : Convert.ToInt32(reader["ROL"].ToString());
                     }
                 }
                 return response;

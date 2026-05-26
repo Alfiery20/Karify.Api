@@ -13,5 +13,6 @@
         public string Correo { get; set; }
         public int Facultad { get; set; }
         public int Escuela { get; set; }
+        public int Rol { get; set; }
     }
 }

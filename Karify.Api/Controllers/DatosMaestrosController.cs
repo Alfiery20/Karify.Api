@@ -33,14 +33,13 @@ namespace Karify.Api.Controllers
         }
 
         [HttpGet]
-        [Route("obtenerProfesor/{nombre}")]
+        [Route("obtenerProfesor/{nombre?}")]
         [ProducesResponseType(typeof(ObtenerProfesorQueryDMDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ObtenerProfesor(string nombre)
+        public async Task<IActionResult> ObtenerProfesor(string? nombre)
         {
             var response = await Mediator.Send(new ObtenerProfesorDMQuery()
             {
-                Nombre = nombre,
-                IdEscuela = this.CurrentUser.IdEscuela
+                Nombre = nombre ?? ""
             });
             return Ok(response);
         }

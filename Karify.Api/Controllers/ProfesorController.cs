@@ -1,6 +1,7 @@
 ﻿using Karify.Api.Controllers;
 using Karify.Api.Filter;
 using Karify.Application.Profesor.Command.AgregarProfesor;
+using Karify.Application.Profesor.Command.EditarProfesor;
 using Karify.Application.Profesor.Command.EliminarProfesor;
 using Karify.Application.Profesor.Query.ObtenerProfesor;
 using Karify.Application.Profesor.Query.VerProfesor;
@@ -35,6 +36,15 @@ namespace Karify.Api.ContProfesorlers
         [Route("agregarProfesor")]
         [ProducesResponseType(typeof(AgregarProfesorCommandDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> AgregarProfesor(AgregarProfesorCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("editarProfesor")]
+        [ProducesResponseType(typeof(EditarProfesorCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> EditarProfesor(EditarProfesorCommand command)
         {
             var response = await Mediator.Send(command);
             return Ok(response);

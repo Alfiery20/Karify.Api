@@ -17,6 +17,7 @@ namespace Karify.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<ObtenerProyectoQueryDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ObtenerProyecto(ObtenerProyectoQuery query)
         {
+            query.IdAlumno = Convert.ToInt32(this.CurrentUser.Id);
             var response = await Mediator.Send(query);
             return Ok(response);
         }
@@ -35,6 +36,7 @@ namespace Karify.Api.Controllers
         [ProducesResponseType(typeof(AgregarProyectoCommandDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> AgregarProyecto(AgregarProyectoCommand command)
         {
+            command.IdAlumno = Convert.ToInt32(this.CurrentUser.Id);
             var response = await Mediator.Send(command);
             return Ok(response);
         }

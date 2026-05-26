@@ -83,7 +83,7 @@ namespace Karify.Persistence.Repository
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@pNombre", query.Nombre, DbType.String, ParameterDirection.Input);
-                parameters.Add("@pIdAlumno", query.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pIdAlumno", query.IdAlumno, DbType.Int32, ParameterDirection.Input);
 
                 using (var reader = await cnx.ExecuteReaderAsync(
                     "[dbo].[usp_ObtenerProyecto]",
@@ -122,7 +122,6 @@ namespace Karify.Persistence.Repository
                 {
                     while (reader.Read())
                     {
-                        var prueba = reader["ESTADO"].ToString();
                         response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
                         response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
                         response.Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
