@@ -37,6 +37,7 @@ namespace Karify.Api.Controllers
         public async Task<IActionResult> AgregarProyecto(AgregarProyectoCommand command)
         {
             command.IdAlumno = Convert.ToInt32(this.CurrentUser.Id);
+            command.NombreAlumno = this.CurrentUser.NombreCompleto;
             var response = await Mediator.Send(command);
             return Ok(response);
         }

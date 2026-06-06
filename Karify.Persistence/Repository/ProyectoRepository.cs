@@ -36,8 +36,12 @@ namespace Karify.Persistence.Repository
                 parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pDescripcion", command.Descripcion, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pFechaRegistro", this._dateTimeService.HoraLocal(), DbType.DateTime, ParameterDirection.Input);
+                parameters.Add("@pNombreArchivo", command.NombreArchivo, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pArchivoBase64", Convert.FromBase64String(command.ArchivoEncriptado), DbType.Binary, ParameterDirection.Input);
+                parameters.Add("@pPeso", command.Peso, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pIdAlumno", command.IdAlumno, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pIdProfesor", command.IdProfesor, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@idNuevoProyecto", 0, DbType.Int32, ParameterDirection.Output);
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
 
                 using var reader = await cnx.ExecuteReaderAsync(
@@ -46,6 +50,7 @@ namespace Karify.Persistence.Repository
                     commandType: CommandType.StoredProcedure);
 
                 response.Mensaje = parameters.Get<string>("msj");
+                response.IdProyecto = parameters.Get<int>("idNuevoProyecto");
 
                 return response;
             }
@@ -98,7 +103,8 @@ namespace Karify.Persistence.Repository
                             Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString(),
                             Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString(),
                             Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? "" : reader["PROFESOR"].ToString(),
-                            FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"])
+                            FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"]),
+                            Estado = Convert.IsDBNull(reader["ESTADO"]) ? "" : reader["ESTADO"].ToString()
                         });
                     }
                 }

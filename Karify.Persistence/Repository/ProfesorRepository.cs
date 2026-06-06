@@ -171,5 +171,28 @@ namespace Karify.Persistence.Repository
                 return response;
             }
         }
+
+        public async Task<string> ObtenerCorreoProfesor(int idProfesor)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                string response = "";
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProfesor", idProfesor, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[sp_ObtenerCorreoProfesor]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
+                    }
+                }
+                return response;
+            }
+        }
     }
 }

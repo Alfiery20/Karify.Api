@@ -13,5 +13,6 @@ namespace Karify.Application.Common.Interface.Repositories
         Task<IEnumerable<ObtenerProfesorQueryDTO>> ObtenerProfesor(ObtenerProfesorQuery query);
         Task<EliminarProfesorCommandDTO> EliminarProfesor(EliminarProfesorCommand command);
         Task<VerProfesorQueryDTO> VerProfesor(VerProfesorQuery query);
+        Task<string> ObtenerCorreoProfesor(int idProfesor);
     }
 }

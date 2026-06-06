@@ -79,6 +79,7 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
                 new Claim("nombre", command.Nombre ?? ""),
                 new Claim("apellido_paterno", command.ApellidoPaterno ?? ""),
                 new Claim("apellido_materno", command.ApellidoMaterno ?? ""),
+                new Claim("nombre_completo", command.Nombre + " " + command.ApellidoPaterno + " " + command.ApellidoMaterno ?? ""),
                 new Claim("correo", command.Correo ?? ""),
                 new Claim("telefono", command.Telefono ?? ""),
                 new Claim("idEscuela", command.IdEscuela.ToString() ?? ""),
