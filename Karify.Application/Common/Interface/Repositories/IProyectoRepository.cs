@@ -1,7 +1,11 @@
 ﻿using Karify.Application.Proyecto.Command.AgregarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
+using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
 using Karify.Application.Proyecto.Query.VerProyecto;
+using Karify.Application.Proyecto.Query.VerProyectoRevision;
 
 namespace Karify.Application.Common.Interface.Repositories
 {
@@ -11,5 +15,11 @@ namespace Karify.Application.Common.Interface.Repositories
         Task<EditarProyectoCommandDTO> EditarProyecto(EditarProyectoCommand command);
         Task<IEnumerable<ObtenerProyectoQueryDTO>> ObtenerProyecto(ObtenerProyectoQuery query);
         Task<VerProyectoQueryDTO> VerProyecto(VerProyectoQuery query);
+        Task<IEnumerable<ObtenerProyectoPorProfesorQueryDTO>> ObtenerProyectoPorProfesor(ObtenerProyectoPorProfesorQuery query);
+        Task<VerProyectoRevisionQueryDTO> VerProyectoRevision(VerProyectoRevisionQuery query);
+        Task<AprobarProyectoCommandDTO> AprobarProyecto(AprobarProyectoCommand command);
+        Task<RechazarProyectoCommandDTO> RechazarProyecto(RechazarProyectoCommand command);
+        Task<AprobacionProyectoCorreo> ObtenerInformacionAprobacion(int idProyecto);
+        Task<RechazoProyectoCorreo> ObtenerInformacionRechazo(int idProyecto);
     }
 }

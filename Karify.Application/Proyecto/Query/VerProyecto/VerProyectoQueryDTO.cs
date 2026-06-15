@@ -6,6 +6,8 @@
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public int Profesor { get; set; }
+        public string NombreProfesor { get; set; }
+        public string NombreArchivo { get; set; }
         public DateTime FechaRegistro { get; set; }
     }
 }

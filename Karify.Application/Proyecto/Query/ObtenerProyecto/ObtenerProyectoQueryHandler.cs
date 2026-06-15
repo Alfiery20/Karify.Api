@@ -18,7 +18,9 @@ namespace Karify.Application.Proyecto.Query.ObtenerProyecto
         }
         public Task<IEnumerable<ObtenerProyectoQueryDTO>> Handle(ObtenerProyectoQuery request, CancellationToken cancellationToken)
         {
+            this._logger.LogInformation("Iniciando handler de obtener proyecto");
             var response = this._proyectoRepository.ObtenerProyecto(request);
+            this._logger.LogInformation("Finalizando handler de obtener proyecto");
             return response;
         }
     }

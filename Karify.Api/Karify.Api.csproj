@@ -29,6 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\AprobacionProyecto.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\RechazoProyecto.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\SolicitudAceptacionDocente.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -30,7 +30,7 @@ namespace Karify.Application.Proyecto.Command.AgregarProyecto
             if (response.Mensaje.Equals("OK"))
             {
                 var correoProfesor = await this._profesorRepository.ObtenerCorreoProfesor(request.IdProfesor);
-                await this._googleService.EnvioCorreo(new EnvioCorreoSolicitud()
+                await this._googleService.EnvioSolicitudAprobacion(new EnvioCorreoSolicitud()
                 {
                     CorreoDocente = correoProfesor,
                     Alumno = request.NombreAlumno,

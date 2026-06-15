@@ -1,8 +1,12 @@
 ﻿using Karify.Api.Filter;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
+using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
 using Karify.Application.Proyecto.Query.VerProyecto;
+using Karify.Application.Proyecto.Query.VerProyectoRevision;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Karify.Api.Controllers
@@ -47,6 +51,55 @@ namespace Karify.Api.Controllers
         [ProducesResponseType(typeof(EditarProyectoCommandDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> EditarProyecto(EditarProyectoCommand command)
         {
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("obtenerProyectoPorProfesor")]
+        [ProducesResponseType(typeof(IEnumerable<ObtenerProyectoPorProfesorQueryDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ObtenerProyectoPorProfesor()
+        {
+            var response = await Mediator.Send(new ObtenerProyectoPorProfesorQuery()
+            {
+                IdProfesor = Convert.ToInt32(this.CurrentUser.Id)
+            });
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("verProyectoRevision/{idProyecto}")]
+        [ProducesResponseType(typeof(VerProyectoRevisionQueryDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> VerProyectoRevision(int idProyecto)
+        {
+            var response = await Mediator.Send(new VerProyectoRevisionQuery { IdProyecto = idProyecto });
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("AprobarProyecto/{idProyecto}")]
+        [ProducesResponseType(typeof(AprobarProyectoCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AprobarProyecto(int idProyecto)
+        {
+            var command = new AprobarProyectoCommand
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("RechazarProyecto/{idProyecto}")]
+        [ProducesResponseType(typeof(RechazarProyectoCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> RechazarProyecto(int idProyecto)
+        {
+            var command = new RechazarProyectoCommand
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
             var response = await Mediator.Send(command);
             return Ok(response);
         }

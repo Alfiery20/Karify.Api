@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f6f9;
+            padding: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #b91c1c;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            margin: 6px 0;
+            color: #333;
+        }
+
+        .highlight {
+            background: #fde8e8;
+            border-left: 4px solid #b91c1c;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>⚠️ Proyecto Rechazado</h2>
+        <p>Estimado(a) <strong>{{Nombre}} {{ApellidoPaterno}} {{ApellidoMaterno}}</strong>,</p>
+
+        <div class="info">
+            <p><strong>Número de Documento:</strong> {{NumeroDocumento}}</p>
+            <p><strong>Código Universitario:</strong> {{CodigoUniversitario}}</p>
+            <p><strong>Profesor Asesor:</strong> {{NombreProfesor}} {{ApellidoPaternoProfesor}} {{ApellidoMaternoProfesor}}</p>
+            <p><strong>Nombre del Proyecto:</strong> {{NombreProyecto}}</p>
+            <p><strong>Descripción:</strong> {{DescripcionProyecto}}</p>
+            <p><strong>Fecha de Resultado:</strong> {{FechaResultado}}</p>
+        </div>
+
+        <div class="highlight">
+            <p>
+                Lamentamos informarle que su proyecto ha sido <strong>rechazado</strong>.
+                Esto puede deberse a que el profesor no aceptó ser asesor o a inconsistencias en la información proporcionada.
+            </p>
+        </div>
+
+        <p>
+            Le recomendamos comunicarse con el área correspondiente para recibir orientación y resolver las observaciones.
+            Estamos seguros de que con los ajustes necesarios podrá continuar con éxito su proceso académico.
+        </p>
+
+        <div class="footer">
+            Universidad Nacional Pedro Ruiz Gallo – Sistema de Gestión de Proyectos
+        </div>
+    </div>
+</body>
+</html>

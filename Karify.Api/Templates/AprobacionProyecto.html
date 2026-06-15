@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f6f9;
+            padding: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #006400;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            margin: 6px 0;
+            color: #333;
+        }
+
+        .highlight {
+            background: #e6f4ea;
+            border-left: 4px solid #006400;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🎉 Proyecto Aprobado</h2>
+        <p>Estimado(a) <strong>{{Nombre}} {{ApellidoPaterno}} {{ApellidoMaterno}}</strong>,</p>
+
+        <div class="info">
+            <p><strong>Número de Documento:</strong> {{NumeroDocumento}}</p>
+            <p><strong>Código Universitario:</strong> {{CodigoUniversitario}}</p>
+            <p><strong>Profesor Asesor:</strong> {{NombreProfesor}} {{ApellidoPaternoProfesor}} {{ApellidoMaternoProfesor}}</p>
+            <p><strong>Nombre del Proyecto:</strong> {{NombreProyecto}}</p>
+            <p><strong>Descripción:</strong> {{DescripcionProyecto}}</p>
+            <p><strong>Fecha de Resultado:</strong> {{FechaResultado}}</p>
+        </div>
+
+        <div class="highlight">
+            <p>
+                Nos complace informarle que su proyecto ha sido <strong>aprobado</strong> y se encuentra en proceso de revisión automatizada.
+                Próximamente recibirá su constancia oficial de autenticidad.
+            </p>
+        </div>
+
+        <p>Felicitaciones por este importante logro académico. ¡Siga adelante con la misma dedicación y compromiso!</p>
+
+        <div class="footer">
+            Universidad Nacional Pedro Ruiz Gallo – Sistema de Gestión de Proyectos
+        </div>
+    </div>
+</body>
+</html>
