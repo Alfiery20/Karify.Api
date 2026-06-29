@@ -3,6 +3,7 @@ using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
@@ -59,6 +60,7 @@ namespace Karify.Persistence.Repository
                 return response;
             }
         }
+        
         public async Task<EditarProyectoCommandDTO> EditarProyecto(EditarProyectoCommand command)
         {
             using (var cnx = _dataBase.GetConnection())
@@ -135,6 +137,7 @@ namespace Karify.Persistence.Repository
                         response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
                         response.Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
                         response.Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? 0 : Convert.ToInt32(reader["PROFESOR"].ToString());
+                        response.Estado = Convert.IsDBNull(reader["ESTADO"]) ? "" : reader["ESTADO"].ToString();
                         response.NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString();
                         response.NombreArchivo = Convert.IsDBNull(reader["NOMBRE_ARCHIVO"]) ? "" : reader["NOMBRE_ARCHIVO"].ToString();
                         response.FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"]);
@@ -318,6 +321,30 @@ namespace Karify.Persistence.Repository
                         response.FechaResultado = Convert.IsDBNull(reader["FECHA_RESULTADO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_RESULTADO"]);
                     }
                 }
+                return response;
+            }
+        }
+
+        public async Task<CancelarProyectoCommandDTO> CancelarProyecto(CancelarProyectoCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                CancelarProyectoCommandDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProyecto", command.IdProyecto, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pidUsuario", command.IdUsuario, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pfechaCancelacion", this._dateTimeService.HoraLocal(), DbType.DateTime, ParameterDirection.Input);
+
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_CancelarAnalisis]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                response.Mensaje = parameters.Get<string>("msj");
+
                 return response;
             }
         }

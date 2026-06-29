@@ -1,6 +1,7 @@
 ﻿using Karify.Api.Filter;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
@@ -90,12 +91,26 @@ namespace Karify.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("RechazarProyecto/{idProyecto}")]
         [ProducesResponseType(typeof(RechazarProyectoCommandDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> RechazarProyecto(int idProyecto)
         {
             var command = new RechazarProyectoCommand
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("CancelarProyecto/{idProyecto}")]
+        [ProducesResponseType(typeof(CancelarProyectoCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CancelarProyecto(int idProyecto)
+        {
+            var command = new CancelarProyectoCommand
             {
                 IdProyecto = idProyecto,
                 IdUsuario = Convert.ToInt32(this.CurrentUser.Id)

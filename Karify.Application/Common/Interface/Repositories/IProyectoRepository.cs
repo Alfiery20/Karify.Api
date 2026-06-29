@@ -1,5 +1,6 @@
 ﻿using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
@@ -21,5 +22,6 @@ namespace Karify.Application.Common.Interface.Repositories
         Task<RechazarProyectoCommandDTO> RechazarProyecto(RechazarProyectoCommand command);
         Task<AprobacionProyectoCorreo> ObtenerInformacionAprobacion(int idProyecto);
         Task<RechazoProyectoCorreo> ObtenerInformacionRechazo(int idProyecto);
+        Task<CancelarProyectoCommandDTO> CancelarProyecto(CancelarProyectoCommand command);
     }
 }

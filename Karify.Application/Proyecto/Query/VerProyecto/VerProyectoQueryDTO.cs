@@ -5,6 +5,7 @@
         public int IdProyecto { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
+        public string Estado { get; set; }
         public int Profesor { get; set; }
         public string NombreProfesor { get; set; }
         public string NombreArchivo { get; set; }
