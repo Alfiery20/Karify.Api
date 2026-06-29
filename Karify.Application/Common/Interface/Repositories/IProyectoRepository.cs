@@ -3,6 +3,7 @@ using Karify.Application.Proyecto.Command.AprobarProyecto;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
 using Karify.Application.Proyecto.Query.VerProyecto;
@@ -23,5 +24,6 @@ namespace Karify.Application.Common.Interface.Repositories
         Task<AprobacionProyectoCorreo> ObtenerInformacionAprobacion(int idProyecto);
         Task<RechazoProyectoCorreo> ObtenerInformacionRechazo(int idProyecto);
         Task<CancelarProyectoCommandDTO> CancelarProyecto(CancelarProyectoCommand command);
+        Task<ObtenerConstanciaQueryDTO> ObtenerConstancia(ObtenerConstanciaQuery query);
     }
 }

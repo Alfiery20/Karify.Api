@@ -61,14 +61,14 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
             });
             if (response.IdUsuario != 0)
             {
-                response.Token = this.GenerateToken(response, true);
+                response.Token = this.GenerateToken(response);
                 response.Menus = (await this._autenticacionRepository.ObtenerMenu(response.IdRol)).ToArray();
             }
             this._logger.LogInformation("Finalizando proceso de login con Google en handler {handler}", GetType().Name);
             return response;
         }
 
-        private string GenerateToken(LoginCommandDTO command, bool recordar)
+        private string GenerateToken(LoginCommandDTO command)
         {
             var claims = new List<Claim>
             {
@@ -91,7 +91,7 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
                 new Claim("rol", command.Rol ?? "")
             };
 
-            var token = _jwtService.Generate(claims.ToArray(), recordar, this._dateTimeService.HoraLocal());
+            var token = _jwtService.Generate(claims.ToArray(), this._dateTimeService.HoraLocal());
 
             return token;
         }

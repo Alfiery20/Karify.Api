@@ -6,6 +6,7 @@ using Karify.Application.Proyecto.Command.AprobarProyecto;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
 using Karify.Application.Proyecto.Query.VerProyecto;
@@ -345,6 +346,31 @@ namespace Karify.Persistence.Repository
 
                 response.Mensaje = parameters.Get<string>("msj");
 
+                return response;
+            }
+        }
+
+        public async Task<ObtenerConstanciaQueryDTO> ObtenerConstancia(ObtenerConstanciaQuery query)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                ObtenerConstanciaQueryDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdProyecto", query.IdProyecto, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pIdUsuario", query.IdUsuario, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_ObtenerConstanciaDescarga]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response.Base64 = Convert.IsDBNull(reader["CONSTANCIA_BASE64"]) ? "" : reader["CONSTANCIA_BASE64"].ToString();
+                        response.NombreConstancia = Convert.IsDBNull(reader["NOMBRE_CONSTANCIA"]) ? "" : reader["NOMBRE_CONSTANCIA"].ToString();
+                    }
+                }
                 return response;
             }
         }

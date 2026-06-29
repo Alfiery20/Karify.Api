@@ -52,15 +52,13 @@ namespace Karify.Api.Filter
                 var jwtToken = validatedToken as JwtSecurityToken;
                 if (jwtToken != null)
                 {
-                    var claims = jwtToken.Claims;
-
-                    var userId = claims.FirstOrDefault(c => c.Type == "id")?.Value ?? "";
-                    var userName = claims.FirstOrDefault(c => c.Type == "nombre")?.Value ?? "";
-                    var userApellidoPaterno = claims.FirstOrDefault(c => c.Type == "apellido_paterno")?.Value ?? "";
-                    var userApellidoMaterno = claims.FirstOrDefault(c => c.Type == "apellido_materno")?.Value ?? "";
-                    var userFullName = claims.FirstOrDefault(c => c.Type == "nombre_completo")?.Value ?? "";
-                    var rolId = claims.FirstOrDefault(c => c.Type == "id_rol")?.Value ?? "";
-                    var rolName = claims.FirstOrDefault(c => c.Type == "rol_nombre")?.Value ?? "";
+                    var userId = principal.FindFirst(c => c.Type == "id")?.Value ?? "";
+                    var userName = principal.FindFirst(c => c.Type == "nombre")?.Value ?? "";
+                    var userApellidoPaterno = principal.FindFirst(c => c.Type == "apellido_paterno")?.Value ?? "";
+                    var userApellidoMaterno = principal.FindFirst(c => c.Type == "apellido_materno")?.Value ?? "";
+                    var userFullName = principal.FindFirst(c => c.Type == "nombre_completo")?.Value ?? "";
+                    var rolId = principal.FindFirst(c => c.Type == "id_rol")?.Value ?? "";
+                    var rolName = principal.FindFirst(c => c.Type == "rol_nombre")?.Value ?? "";
 
                     var currentUser = new CurrentUser()
                     {
@@ -78,9 +76,26 @@ namespace Karify.Api.Filter
                     context.HttpContext.Session.SetString("dataUser", currenUserSerialize);
                 }
             }
-            catch (Exception ex)
+            catch (SecurityTokenExpiredException)
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new JsonResult(new { mensaje = "Token expirado" })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+            }
+            catch (SecurityTokenException)
+            {
+                context.Result = new JsonResult(new { mensaje = "Token inválido" })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+            }
+            catch (Exception)
+            {
+                context.Result = new JsonResult(new { mensaje = "No autorizado" })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
             }
 
             base.OnActionExecuting(context);

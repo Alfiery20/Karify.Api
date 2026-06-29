@@ -4,6 +4,7 @@ using Karify.Application.Proyecto.Command.AprobarProyecto;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
 using Karify.Application.Proyecto.Query.VerProyecto;
@@ -117,6 +118,26 @@ namespace Karify.Api.Controllers
             };
             var response = await Mediator.Send(command);
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("descargarConstancia/{idProyecto}")]
+        [ProducesResponseType(typeof(ObtenerConstanciaQueryDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DescargarConstancia(int idProyecto)
+        {
+            var command = new ObtenerConstanciaQuery
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
+            var response = await Mediator.Send(command);
+
+            if (response is null || string.IsNullOrEmpty(response.Base64))
+                return NotFound("No se encontró la constancia para este proyecto.");
+
+            var pdfBytes = Convert.FromBase64String(response.Base64);
+
+            return File(pdfBytes, "application/pdf", response.NombreConstancia);
         }
     }
 }
