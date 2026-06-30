@@ -1,9 +1,11 @@
 ﻿using Karify.Api.Filter;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyectoCotesista;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyectoCotesista;
 using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
@@ -53,6 +55,7 @@ namespace Karify.Api.Controllers
         [ProducesResponseType(typeof(EditarProyectoCommandDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> EditarProyecto(EditarProyectoCommand command)
         {
+            command.IdAlumno = Convert.ToInt32(this.CurrentUser.Id);
             var response = await Mediator.Send(command);
             return Ok(response);
         }
@@ -138,6 +141,34 @@ namespace Karify.Api.Controllers
             var pdfBytes = Convert.FromBase64String(response.Base64);
 
             return File(pdfBytes, "application/pdf", response.NombreConstancia);
+        }
+
+        [HttpPost]
+        [Route("AprobarProyectoCotesista/{idProyecto}")]
+        [ProducesResponseType(typeof(AprobarProyectoCotesistaCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AprobarProyectoCotesista(int idProyecto)
+        {
+            var command = new AprobarProyectoCotesistaCommand
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("RechazarProyectoCotesista/{idProyecto}")]
+        [ProducesResponseType(typeof(RechazarProyectoCotesistaCommandDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> RechazarProyectoCotesista(int idProyecto)
+        {
+            var command = new RechazarProyectoCotesistaCommand
+            {
+                IdProyecto = idProyecto,
+                IdUsuario = Convert.ToInt32(this.CurrentUser.Id)
+            };
+            var response = await Mediator.Send(command);
+            return Ok(response);
         }
     }
 }

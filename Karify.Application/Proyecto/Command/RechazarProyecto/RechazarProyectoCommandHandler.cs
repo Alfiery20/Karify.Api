@@ -26,8 +26,12 @@ namespace Karify.Application.Proyecto.Command.RechazarProyecto
             var response = await this._proyectoRepository.RechazarProyecto(request);
             if (response.Mensaje.Equals("OK"))
             {
-                var informacionRechazo = await this._proyectoRepository.ObtenerInformacionRechazo(request.IdProyecto);
-                await this._googleService.EnvioNotificacionRechazo(informacionRechazo);
+                var informacionRechazo = (await this._proyectoRepository.ObtenerInformacionRechazo(request.IdProyecto)).ToList();
+                foreach (var item in informacionRechazo)
+                {
+                    await this._googleService.EnvioNotificacionRechazo(item);
+
+                }
             }
             this._logger.LogInformation("Finalizando handler de rechazar proyecto");
             return response;

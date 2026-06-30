@@ -26,8 +26,11 @@ namespace Karify.Application.Proyecto.Command.AprobarProyecto
             var response = await this._proyectoRepository.AprobarProyecto(request);
             if (response.Mensaje.Equals("OK"))
             {
-                var informacionArpobacion = await this._proyectoRepository.ObtenerInformacionAprobacion(request.IdProyecto);
-                await this._googleService.EnvioNotificacionAprobacion(informacionArpobacion);
+                var informacionCorreos = (await this._proyectoRepository.ObtenerInformacionAprobacion(request.IdProyecto)).ToList();
+                foreach (var item in informacionCorreos)
+                {
+                    await this._googleService.EnvioNotificacionAprobacion(item);
+                }
             }
             this._logger.LogInformation("Finalizando proceso de aprobación del proyecto.");
             return response;

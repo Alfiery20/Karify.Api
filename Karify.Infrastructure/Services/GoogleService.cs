@@ -2,7 +2,9 @@
 using Karify.Application.Common.Interface;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyectoCotesista;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyectoCotesista;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Http.Headers;
@@ -114,7 +116,7 @@ namespace Karify.Infrastructure.Services
             {
                 From = new MailAddress(Correo, "Sistema de Gestión de Proyectos"),
 
-                Subject = "Nueva asignación de proyecto",
+                Subject = "Aprobación asesor",
                 Body = htmlBody,
                 IsBodyHtml = true
             };
@@ -155,7 +157,113 @@ namespace Karify.Infrastructure.Services
             {
                 From = new MailAddress(Correo, "Sistema de Gestión de Proyectos"),
 
-                Subject = "Nueva asignación de proyecto",
+                Subject = "Rechazo asesor",
+                Body = htmlBody,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(aprobacion.Correo);
+
+            await smtp.SendMailAsync(mail);
+        }
+        public async Task EnvioSolicitudAprobacionCotesista(EnvioCorreoSolicitudCotesista envioCorreo)
+        {
+            string
+                Servidor = this.servidor,
+                Correo = this.correo,
+                Clave = this.clave;
+            int PuertoTLS = this.puertoTLS;
+            var smtp = new SmtpClient(Servidor, PuertoTLS)
+            {
+                Credentials = new NetworkCredential(Correo, Clave),
+                EnableSsl = true
+            };
+            var htmlBody = await File.ReadAllTextAsync("Templates/SolicitudAceptacionCotesista.html");
+
+            htmlBody = htmlBody
+                    .Replace("{{NombreCotesista}}", envioCorreo.Cotesista)
+                    .Replace("{{NombreTesista}}", envioCorreo.Alumno)
+                    .Replace("{{NombreProyecto}}", envioCorreo.NombreProyecto)
+                    .Replace("{{DescripcionProyecto}}", envioCorreo.DescripcionProyecto);
+            var mail = new MailMessage
+            {
+                From = new MailAddress(Correo, "Sistema de Gestión de Proyectos"),
+
+                Subject = "Invitación para participar como Cotesista",
+                Body = htmlBody,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(envioCorreo.CorreoCotesista);
+
+            await smtp.SendMailAsync(mail);
+        }
+        public async Task EnvioNotificacionAprobacionCotesista(EnvioCorreoTesistaAceptacion aprobacion)
+        {
+            string
+                Servidor = this.servidor,
+                Correo = this.correo,
+                Clave = this.clave;
+            int PuertoTLS = this.puertoTLS;
+            var smtp = new SmtpClient(Servidor, PuertoTLS)
+            {
+                Credentials = new NetworkCredential(Correo, Clave),
+                EnableSsl = true
+            };
+            var htmlBody = await File.ReadAllTextAsync("Templates/AprobacionProyectoCotesista.html");
+
+            htmlBody = htmlBody
+                .Replace("{{NombreTesista}}",
+                    $"{aprobacion.Nombre} {aprobacion.ApellidoPaterno} {aprobacion.ApellidoMaterno}")
+
+                .Replace("{{NombreCotesista}}",
+                    $"{aprobacion.NombreCotesista} {aprobacion.ApellidoPaternoCotesista} {aprobacion.ApellidoMaternoCotesista}")
+
+                .Replace("{{NombreProyecto}}", aprobacion.NombreProyecto)
+                .Replace("{{DescripcionProyecto}}", aprobacion.DescripcionProyecto);
+
+            var mail = new MailMessage
+            {
+                From = new MailAddress(Correo, "Sistema de Gestión de Proyectos"),
+
+                Subject = "Aceptación de cotesista",
+                Body = htmlBody,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(aprobacion.Correo);
+
+            await smtp.SendMailAsync(mail);
+        }
+        public async Task EnvioNotificacionRechazoCotesista(EnvioCorreoTesistaRechazo aprobacion)
+        {
+            string
+                Servidor = this.servidor,
+                Correo = this.correo,
+                Clave = this.clave;
+            int PuertoTLS = this.puertoTLS;
+            var smtp = new SmtpClient(Servidor, PuertoTLS)
+            {
+                Credentials = new NetworkCredential(Correo, Clave),
+                EnableSsl = true
+            };
+            var htmlBody = await File.ReadAllTextAsync("Templates/RechazoProyectoCotesista.html");
+
+            htmlBody = htmlBody
+                    .Replace("{{NombreTesista}}",
+                        $"{aprobacion.Nombre} {aprobacion.ApellidoPaterno} {aprobacion.ApellidoMaterno}")
+
+                    .Replace("{{NombreCotesista}}",
+                        $"{aprobacion.NombreCotesista} {aprobacion.ApellidoPaternoCotesista} {aprobacion.ApellidoMaternoCotesista}")
+
+                    .Replace("{{NombreProyecto}}", aprobacion.NombreProyecto)
+                    .Replace("{{DescripcionProyecto}}", aprobacion.DescripcionProyecto);
+
+            var mail = new MailMessage
+            {
+                From = new MailAddress(Correo, "Sistema de Gestión de Proyectos"),
+
+                Subject = "Rechazo de cotesista",
                 Body = htmlBody,
                 IsBodyHtml = true
             };

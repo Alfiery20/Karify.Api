@@ -7,6 +7,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\AprobacionProyecto.html" />
+    <None Remove="Templates\AprobacionProyectoCotesista.html" />
+    <None Remove="Templates\RechazoProyecto.html" />
+    <None Remove="Templates\RechazoProyectoCotesista.html" />
+    <None Remove="Templates\SolicitudAceptacionCotesista.html" />
+    <None Remove="Templates\SolicitudAceptacionDocente.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\AprobacionProyecto.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\AprobacionProyectoCotesista.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\RechazoProyecto.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\RechazoProyectoCotesista.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\SolicitudAceptacionCotesista.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\SolicitudAceptacionDocente.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="11.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.9" />
@@ -26,18 +56,6 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Templates\AprobacionProyecto.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Templates\RechazoProyecto.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Templates\SolicitudAceptacionDocente.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

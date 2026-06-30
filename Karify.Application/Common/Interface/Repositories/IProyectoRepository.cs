@@ -1,8 +1,10 @@
 ﻿using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyectoCotesista;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyectoCotesista;
 using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
@@ -21,9 +23,15 @@ namespace Karify.Application.Common.Interface.Repositories
         Task<VerProyectoRevisionQueryDTO> VerProyectoRevision(VerProyectoRevisionQuery query);
         Task<AprobarProyectoCommandDTO> AprobarProyecto(AprobarProyectoCommand command);
         Task<RechazarProyectoCommandDTO> RechazarProyecto(RechazarProyectoCommand command);
-        Task<AprobacionProyectoCorreo> ObtenerInformacionAprobacion(int idProyecto);
-        Task<RechazoProyectoCorreo> ObtenerInformacionRechazo(int idProyecto);
+        Task<IEnumerable<AprobacionProyectoCorreo>> ObtenerInformacionAprobacion(int idProyecto);
+        Task<IEnumerable<RechazoProyectoCorreo>> ObtenerInformacionRechazo(int idProyecto);
         Task<CancelarProyectoCommandDTO> CancelarProyecto(CancelarProyectoCommand command);
         Task<ObtenerConstanciaQueryDTO> ObtenerConstancia(ObtenerConstanciaQuery query);
+        Task<AprobarProyectoCotesistaCommandDTO> AprobarProyectoCotesista(AprobarProyectoCotesistaCommand command);
+        Task<RechazarProyectoCotesistaCommandDTO> RechazarProyectoCotesista(RechazarProyectoCotesistaCommand command);
+        Task<string> ObtenerCorreoCotesista(int idProyecto);
+        Task<EnvioCorreoProfesor> ObtenerInformacionCorreoProfesor(int idProyecto);
+        Task<EnvioCorreoTesistaAceptacion> ObtenerInformacionCorreoCotesistaAprobacion(int idProyecto);
+        Task<EnvioCorreoTesistaRechazo> ObtenerInformacionCorreoCotesistaRechazo(int idProyecto);
     }
 }

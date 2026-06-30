@@ -8,5 +8,6 @@
         public string Profesor { get; set; }
         public string Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
+        public bool EsCotesista { get; set; }
     }
 }

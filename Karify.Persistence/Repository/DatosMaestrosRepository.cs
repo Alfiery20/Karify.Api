@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
+using Karify.Application.DatosMaestros.Query.ObtenerAlumno;
 using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
 using Karify.Application.DatosMaestros.Query.ObtenerProfesor;
@@ -88,6 +89,33 @@ namespace Karify.Persistence.Repository
                     while (reader.Read())
                     {
                         profesores.Add(new ObtenerProfesorQueryDMDTO()
+                        {
+                            Codigo = Convert.IsDBNull(reader["CODIGO"]) ? 0 : Convert.ToInt32(reader["CODIGO"].ToString()),
+                            Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString()
+                        });
+                    }
+                }
+                return profesores;
+            }
+        }
+
+        public async Task<IEnumerable<ObtenerAlumnoDMQueryDTO>> ObtenerAlumnoCotesista(ObtenerAlumnoDMQuery query)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                List<ObtenerAlumnoDMQueryDTO> profesores = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pNombre", query.Nombre, DbType.String, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_DM_ObtenerCotesista]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        profesores.Add(new ObtenerAlumnoDMQueryDTO()
                         {
                             Codigo = Convert.IsDBNull(reader["CODIGO"]) ? 0 : Convert.ToInt32(reader["CODIGO"].ToString()),
                             Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString()

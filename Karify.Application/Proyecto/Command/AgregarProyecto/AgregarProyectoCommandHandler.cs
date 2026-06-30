@@ -29,18 +29,42 @@ namespace Karify.Application.Proyecto.Command.AgregarProyecto
             var response = await this._proyectoRepository.AgregarProyecto(request);
             if (response.Mensaje.Equals("OK"))
             {
-                var correoProfesor = await this._profesorRepository.ObtenerCorreoProfesor(request.IdProfesor);
-                await this._googleService.EnvioSolicitudAprobacion(new EnvioCorreoSolicitud()
+                if (request.IdCotesista == 0)
                 {
-                    CorreoDocente = correoProfesor,
-                    Alumno = request.NombreAlumno,
-                    IdProyecto = response.IdProyecto,
-                    NombreProyecto = request.Nombre,
-                    DescripcionProyecto = request.Descripcion
-                });
+                    await this.EnviarCorreoProfesor(request, response);
+                }
+                else {
+                    await this.EnviarCorreoCotesista(request, response);
+                }
             }
             this._logger.LogInformation("Finalizando proceso de agregar proyecto handler {handler}", GetType().Name);
             return response;
+        }
+
+        private async Task EnviarCorreoProfesor(AgregarProyectoCommand request, AgregarProyectoCommandDTO response) 
+        {
+            var correoProfesor = await this._profesorRepository.ObtenerCorreoProfesor(request.IdProfesor);
+            await this._googleService.EnvioSolicitudAprobacion(new EnvioCorreoSolicitud()
+            {
+                CorreoDocente = correoProfesor,
+                Alumno = request.NombreAlumno,
+                IdProyecto = response.IdProyecto,
+                NombreProyecto = request.Nombre,
+                DescripcionProyecto = request.Descripcion
+            });
+        }
+
+        private async Task EnviarCorreoCotesista(AgregarProyectoCommand request, AgregarProyectoCommandDTO response)
+        {
+            var correoProfesor = await this._proyectoRepository.ObtenerCorreoCotesista(response.IdProyecto);
+            await this._googleService.EnvioSolicitudAprobacionCotesista(new EnvioCorreoSolicitudCotesista()
+            {
+                CorreoCotesista = correoProfesor,
+                Alumno = request.NombreAlumno,
+                Cotesista = request.NombreCotesista,
+                NombreProyecto = request.Nombre,
+                DescripcionProyecto = request.Descripcion
+            });
         }
     }
 }

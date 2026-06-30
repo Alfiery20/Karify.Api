@@ -3,9 +3,11 @@ using Karify.Application.Common.Interface;
 using Karify.Application.Common.Interface.Repositories;
 using Karify.Application.Proyecto.Command.AgregarProyecto;
 using Karify.Application.Proyecto.Command.AprobarProyecto;
+using Karify.Application.Proyecto.Command.AprobarProyectoCotesista;
 using Karify.Application.Proyecto.Command.CancelarProyecto;
 using Karify.Application.Proyecto.Command.EditarProyecto;
 using Karify.Application.Proyecto.Command.RechazarProyecto;
+using Karify.Application.Proyecto.Command.RechazarProyectoCotesista;
 using Karify.Application.Proyecto.Query.ObtenerConstancia;
 using Karify.Application.Proyecto.Query.ObtenerProyecto;
 using Karify.Application.Proyecto.Query.ObtenerProyectoPorProfesor;
@@ -46,6 +48,7 @@ namespace Karify.Persistence.Repository
                 parameters.Add("@pArchivoBase64", command.ArchivoEncriptado, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pPeso", command.Peso, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pIdAlumno", command.IdAlumno, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pIdCotesista", command.IdCotesista, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pIdProfesor", command.IdProfesor, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@idNuevoProyecto", 0, DbType.Int32, ParameterDirection.Output);
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
@@ -61,7 +64,7 @@ namespace Karify.Persistence.Repository
                 return response;
             }
         }
-        
+
         public async Task<EditarProyectoCommandDTO> EditarProyecto(EditarProyectoCommand command)
         {
             using (var cnx = _dataBase.GetConnection())
@@ -72,6 +75,8 @@ namespace Karify.Persistence.Repository
                 parameters.Add("@pIdProyecto", command.IdProyecto, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pDescripcion", command.Descripcion, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pIdAlumno", command.IdAlumno, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pIdCotesista", command.IdCotesista, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@pIdProfesor", command.IdProfesor, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
 
@@ -110,6 +115,7 @@ namespace Karify.Persistence.Repository
                             Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString(),
                             Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? "" : reader["PROFESOR"].ToString(),
                             FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"]),
+                            EsCotesista = Convert.IsDBNull(reader["ES_COTESISTA"]) ? false : (reader["ES_COTESISTA"].ToString() == "1"),
                             Estado = Convert.IsDBNull(reader["ESTADO"]) ? "" : reader["ESTADO"].ToString()
                         });
                     }
@@ -137,11 +143,14 @@ namespace Karify.Persistence.Repository
                         response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
                         response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
                         response.Descripcion = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
-                        response.Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? 0 : Convert.ToInt32(reader["PROFESOR"].ToString());
                         response.Estado = Convert.IsDBNull(reader["ESTADO"]) ? "" : reader["ESTADO"].ToString();
+                        response.Profesor = Convert.IsDBNull(reader["PROFESOR"]) ? 0 : Convert.ToInt32(reader["PROFESOR"].ToString());
                         response.NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString();
+                        response.Cotesista = Convert.IsDBNull(reader["COTESISTA"]) ? 0 : Convert.ToInt32(reader["COTESISTA"].ToString());
+                        response.NombreCotesista = Convert.IsDBNull(reader["NOMBRE_COTESISTA"]) ? "" : reader["NOMBRE_COTESISTA"].ToString();
                         response.NombreArchivo = Convert.IsDBNull(reader["NOMBRE_ARCHIVO"]) ? "" : reader["NOMBRE_ARCHIVO"].ToString();
                         response.FechaRegistro = Convert.IsDBNull(reader["FECHA_REGISTRO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_REGISTRO"]);
+                        response.EsCotesista = Convert.IsDBNull(reader["ES_COTESISTA"]) ? false : (reader["ES_COTESISTA"].ToString() == "1");
                     }
                 }
                 return response;
@@ -258,11 +267,11 @@ namespace Karify.Persistence.Repository
             }
         }
 
-        public async Task<AprobacionProyectoCorreo> ObtenerInformacionAprobacion(int idProyecto)
+        public async Task<IEnumerable<AprobacionProyectoCorreo>> ObtenerInformacionAprobacion(int idProyecto)
         {
             using (var cnx = _dataBase.GetConnection())
             {
-                AprobacionProyectoCorreo response = new AprobacionProyectoCorreo();
+                List<AprobacionProyectoCorreo> response = new();
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@pIdProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
@@ -274,29 +283,33 @@ namespace Karify.Persistence.Repository
                 {
                     while (reader.Read())
                     {
-                        response.NumeroDocumento = Convert.IsDBNull(reader["NUMERO_DOCUMENTO"]) ? "" : reader["NUMERO_DOCUMENTO"].ToString();
-                        response.CodigoUniversitario = Convert.IsDBNull(reader["CODIGO_UNIVERSITARIO"]) ? "" : reader["CODIGO_UNIVERSITARIO"].ToString();
-                        response.Correo = Convert.IsDBNull(reader["CORREO_ALUMNO"]) ? "" : reader["CORREO_ALUMNO"].ToString();
-                        response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
-                        response.ApellidoPaterno = Convert.IsDBNull(reader["APELLIDO_PATERNO"]) ? "" : reader["APELLIDO_PATERNO"].ToString();
-                        response.ApellidoMaterno = Convert.IsDBNull(reader["APELLIDO_MATERNO"]) ? "" : reader["APELLIDO_MATERNO"].ToString();
-                        response.NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString();
-                        response.ApellidoPaternoProfesor = Convert.IsDBNull(reader["APELLIDO_PATERNO_PROFESOR"]) ? "" : reader["APELLIDO_PATERNO_PROFESOR"].ToString();
-                        response.ApellidoMaternoProfesor = Convert.IsDBNull(reader["APELLIDO_MATERNO_PROFESOR"]) ? "" : reader["APELLIDO_MATERNO_PROFESOR"].ToString();
-                        response.NombreProyecto = Convert.IsDBNull(reader["NOMBRE_PROYECTO"]) ? "" : reader["NOMBRE_PROYECTO"].ToString();
-                        response.DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION_PROYECTO"]) ? "" : reader["DESCRIPCION_PROYECTO"].ToString();
-                        response.FechaResultado = Convert.IsDBNull(reader["FECHA_RESULTADO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_RESULTADO"]);
+                        response.Add(new AprobacionProyectoCorreo()
+                        {
+
+                            NumeroDocumento = Convert.IsDBNull(reader["NUMERO_DOCUMENTO"]) ? "" : reader["NUMERO_DOCUMENTO"].ToString(),
+                            CodigoUniversitario = Convert.IsDBNull(reader["CODIGO_UNIVERSITARIO"]) ? "" : reader["CODIGO_UNIVERSITARIO"].ToString(),
+                            Correo = Convert.IsDBNull(reader["CORREO_ALUMNO"]) ? "" : reader["CORREO_ALUMNO"].ToString(),
+                            Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString(),
+                            ApellidoPaterno = Convert.IsDBNull(reader["APELLIDO_PATERNO"]) ? "" : reader["APELLIDO_PATERNO"].ToString(),
+                            ApellidoMaterno = Convert.IsDBNull(reader["APELLIDO_MATERNO"]) ? "" : reader["APELLIDO_MATERNO"].ToString(),
+                            NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString(),
+                            ApellidoPaternoProfesor = Convert.IsDBNull(reader["APELLIDO_PATERNO_PROFESOR"]) ? "" : reader["APELLIDO_PATERNO_PROFESOR"].ToString(),
+                            ApellidoMaternoProfesor = Convert.IsDBNull(reader["APELLIDO_MATERNO_PROFESOR"]) ? "" : reader["APELLIDO_MATERNO_PROFESOR"].ToString(),
+                            NombreProyecto = Convert.IsDBNull(reader["NOMBRE_PROYECTO"]) ? "" : reader["NOMBRE_PROYECTO"].ToString(),
+                            DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION_PROYECTO"]) ? "" : reader["DESCRIPCION_PROYECTO"].ToString(),
+                            FechaResultado = Convert.IsDBNull(reader["FECHA_RESULTADO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_RESULTADO"]),
+                        });
                     }
                 }
                 return response;
             }
         }
 
-        public async Task<RechazoProyectoCorreo> ObtenerInformacionRechazo(int idProyecto)
+        public async Task<IEnumerable<RechazoProyectoCorreo>> ObtenerInformacionRechazo(int idProyecto)
         {
             using (var cnx = _dataBase.GetConnection())
             {
-                RechazoProyectoCorreo response = new RechazoProyectoCorreo();
+                List<RechazoProyectoCorreo> response = new();
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@pIdProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
@@ -308,18 +321,22 @@ namespace Karify.Persistence.Repository
                 {
                     while (reader.Read())
                     {
-                        response.NumeroDocumento = Convert.IsDBNull(reader["NUMERO_DOCUMENTO"]) ? "" : reader["NUMERO_DOCUMENTO"].ToString();
-                        response.CodigoUniversitario = Convert.IsDBNull(reader["CODIGO_UNIVERSITARIO"]) ? "" : reader["CODIGO_UNIVERSITARIO"].ToString();
-                        response.Correo = Convert.IsDBNull(reader["CORREO_ALUMNO"]) ? "" : reader["CORREO_ALUMNO"].ToString();
-                        response.Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
-                        response.ApellidoPaterno = Convert.IsDBNull(reader["APELLIDO_PATERNO"]) ? "" : reader["APELLIDO_PATERNO"].ToString();
-                        response.ApellidoMaterno = Convert.IsDBNull(reader["APELLIDO_MATERNO"]) ? "" : reader["APELLIDO_MATERNO"].ToString();
-                        response.NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString();
-                        response.ApellidoPaternoProfesor = Convert.IsDBNull(reader["APELLIDO_PATERNO_PROFESOR"]) ? "" : reader["APELLIDO_PATERNO_PROFESOR"].ToString();
-                        response.ApellidoMaternoProfesor = Convert.IsDBNull(reader["APELLIDO_MATERNO_PROFESOR"]) ? "" : reader["APELLIDO_MATERNO_PROFESOR"].ToString();
-                        response.NombreProyecto = Convert.IsDBNull(reader["NOMBRE_PROYECTO"]) ? "" : reader["NOMBRE_PROYECTO"].ToString();
-                        response.DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION_PROYECTO"]) ? "" : reader["DESCRIPCION_PROYECTO"].ToString();
-                        response.FechaResultado = Convert.IsDBNull(reader["FECHA_RESULTADO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_RESULTADO"]);
+                        response.Add(new RechazoProyectoCorreo()
+                        {
+
+                            NumeroDocumento = Convert.IsDBNull(reader["NUMERO_DOCUMENTO"]) ? "" : reader["NUMERO_DOCUMENTO"].ToString(),
+                            CodigoUniversitario = Convert.IsDBNull(reader["CODIGO_UNIVERSITARIO"]) ? "" : reader["CODIGO_UNIVERSITARIO"].ToString(),
+                            Correo = Convert.IsDBNull(reader["CORREO_ALUMNO"]) ? "" : reader["CORREO_ALUMNO"].ToString(),
+                            Nombre = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString(),
+                            ApellidoPaterno = Convert.IsDBNull(reader["APELLIDO_PATERNO"]) ? "" : reader["APELLIDO_PATERNO"].ToString(),
+                            ApellidoMaterno = Convert.IsDBNull(reader["APELLIDO_MATERNO"]) ? "" : reader["APELLIDO_MATERNO"].ToString(),
+                            NombreProfesor = Convert.IsDBNull(reader["NOMBRE_PROFESOR"]) ? "" : reader["NOMBRE_PROFESOR"].ToString(),
+                            ApellidoPaternoProfesor = Convert.IsDBNull(reader["APELLIDO_PATERNO_PROFESOR"]) ? "" : reader["APELLIDO_PATERNO_PROFESOR"].ToString(),
+                            ApellidoMaternoProfesor = Convert.IsDBNull(reader["APELLIDO_MATERNO_PROFESOR"]) ? "" : reader["APELLIDO_MATERNO_PROFESOR"].ToString(),
+                            NombreProyecto = Convert.IsDBNull(reader["NOMBRE_PROYECTO"]) ? "" : reader["NOMBRE_PROYECTO"].ToString(),
+                            DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION_PROYECTO"]) ? "" : reader["DESCRIPCION_PROYECTO"].ToString(),
+                            FechaResultado = Convert.IsDBNull(reader["FECHA_RESULTADO"]) ? DateTime.MinValue : Convert.ToDateTime(reader["FECHA_RESULTADO"])
+                        });
                     }
                 }
                 return response;
@@ -369,6 +386,156 @@ namespace Karify.Persistence.Repository
                     {
                         response.Base64 = Convert.IsDBNull(reader["CONSTANCIA_BASE64"]) ? "" : reader["CONSTANCIA_BASE64"].ToString();
                         response.NombreConstancia = Convert.IsDBNull(reader["NOMBRE_CONSTANCIA"]) ? "" : reader["NOMBRE_CONSTANCIA"].ToString();
+                    }
+                }
+                return response;
+            }
+        }
+
+        public async Task<AprobarProyectoCotesistaCommandDTO> AprobarProyectoCotesista(AprobarProyectoCotesistaCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                AprobarProyectoCotesistaCommandDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdProyecto", command.IdProyecto, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pIdUsuario", command.IdUsuario, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_AprobarProyectoCotesista]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                response.Mensaje = parameters.Get<string>("msj");
+
+                return response;
+            }
+        }
+
+        public async Task<RechazarProyectoCotesistaCommandDTO> RechazarProyectoCotesista(RechazarProyectoCotesistaCommand command)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                RechazarProyectoCotesistaCommandDTO response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pIdProyecto", command.IdProyecto, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@pIdUsuario", command.IdUsuario, DbType.Int32, ParameterDirection.Input);
+                parameters.Add("@msj", "", DbType.String, ParameterDirection.Output);
+
+                using var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[usp_RechazarProyectoCotesista]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                response.Mensaje = parameters.Get<string>("msj");
+
+                return response;
+            }
+        }
+
+        public async Task<string> ObtenerCorreoCotesista(int idProyecto)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                string response = "";
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[sp_ObtenerCorreoCotesista]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
+                    }
+                }
+                return response;
+            }
+        }
+
+        public async Task<EnvioCorreoProfesor> ObtenerInformacionCorreoProfesor(int idProyecto)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                EnvioCorreoProfesor response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[sp_ObtenerDatosCorreoProfesor]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
+                        response.Correo = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
+                        response.Alumno = Convert.IsDBNull(reader["ALUMNO"]) ? "" : reader["ALUMNO"].ToString();
+                        response.NombreProyecto = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
+                        response.DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
+                    }
+                }
+                return response;
+            }
+        }
+
+        public async Task<EnvioCorreoTesistaAceptacion> ObtenerInformacionCorreoCotesistaAprobacion(int idProyecto)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                EnvioCorreoTesistaAceptacion response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[sp_ObtenerDatosCorreoCotesistaAprobacion]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
+                        response.Nombre = Convert.IsDBNull(reader["ALUMNO"]) ? "" : reader["ALUMNO"].ToString();
+                        response.NombreCotesista = Convert.IsDBNull(reader["COTESISTA"]) ? "" : reader["COTESISTA"].ToString();
+                        response.Correo = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
+                        response.NombreProyecto = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
+                        response.DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
+                    }
+                }
+                return response;
+            }
+        }
+
+        public async Task<EnvioCorreoTesistaRechazo> ObtenerInformacionCorreoCotesistaRechazo(int idProyecto)
+        {
+            using (var cnx = _dataBase.GetConnection())
+            {
+                EnvioCorreoTesistaRechazo response = new();
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@pidProyecto", idProyecto, DbType.Int32, ParameterDirection.Input);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "[dbo].[sp_ObtenerDatosCorreoCotesistaRechazo]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    while (reader.Read())
+                    {
+                        response.IdProyecto = Convert.IsDBNull(reader["ID"]) ? 0 : Convert.ToInt32(reader["ID"].ToString());
+                        response.Nombre = Convert.IsDBNull(reader["ALUMNO"]) ? "" : reader["ALUMNO"].ToString();
+                        response.NombreCotesista = Convert.IsDBNull(reader["COTESISTA"]) ? "" : reader["COTESISTA"].ToString();
+                        response.Correo = Convert.IsDBNull(reader["CORREO"]) ? "" : reader["CORREO"].ToString();
+                        response.NombreProyecto = Convert.IsDBNull(reader["NOMBRE"]) ? "" : reader["NOMBRE"].ToString();
+                        response.DescripcionProyecto = Convert.IsDBNull(reader["DESCRIPCION"]) ? "" : reader["DESCRIPCION"].ToString();
                     }
                 }
                 return response;

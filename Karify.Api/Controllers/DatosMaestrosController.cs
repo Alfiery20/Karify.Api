@@ -1,4 +1,5 @@
-﻿using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
+﻿using Karify.Application.DatosMaestros.Query.ObtenerAlumno;
+using Karify.Application.DatosMaestros.Query.ObtenerEscuela;
 using Karify.Application.DatosMaestros.Query.ObtenerFacultad;
 using Karify.Application.DatosMaestros.Query.ObtenerProfesor;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,7 @@ namespace Karify.Api.Controllers
     {
         [HttpGet]
         [Route("obtenerFacultad")]
-        [ProducesResponseType(typeof(ObtenerFacultadQueryDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ObtenerFacultadQueryDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ObtenerFacultad()
         {
             var response = await Mediator.Send(new ObtenerFacultadQuery());
@@ -22,7 +23,7 @@ namespace Karify.Api.Controllers
 
         [HttpGet]
         [Route("obtenerEscuela/{idFacultad}")]
-        [ProducesResponseType(typeof(ObtenerEscuelaQueryDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ObtenerEscuelaQueryDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ObtenerFacultad(int idFacultad)
         {
             var response = await Mediator.Send(new ObtenerEscuelaQuery()
@@ -34,10 +35,22 @@ namespace Karify.Api.Controllers
 
         [HttpGet]
         [Route("obtenerProfesor/{nombre?}")]
-        [ProducesResponseType(typeof(ObtenerProfesorQueryDMDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ObtenerProfesorQueryDMDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ObtenerProfesor(string? nombre)
         {
             var response = await Mediator.Send(new ObtenerProfesorDMQuery()
+            {
+                Nombre = nombre ?? ""
+            });
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("obtenerAlumno/{nombre?}")]
+        [ProducesResponseType(typeof(IEnumerable<ObtenerAlumnoDMQueryDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ObtenerAlumnoCotesista(string? nombre)
+        {
+            var response = await Mediator.Send(new ObtenerAlumnoDMQuery()
             {
                 Nombre = nombre ?? ""
             });
