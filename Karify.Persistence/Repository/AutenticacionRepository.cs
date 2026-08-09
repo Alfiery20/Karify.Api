@@ -55,6 +55,7 @@ namespace Karify.Persistence.Repository
                             LlenarPerfil = Convert.IsDBNull(reader["ES_NECESARIO_LLENAR"]) ? false : Convert.ToBoolean(reader["ES_NECESARIO_LLENAR"].ToString()),
                             IdRol = Convert.IsDBNull(reader["ID_ROL"]) ? 0 : Convert.ToInt32(reader["ID_ROL"].ToString()),
                             Rol = Convert.IsDBNull(reader["ROL"]) ? string.Empty : reader["ROL"].ToString(),
+                            EstadoRol = Convert.IsDBNull(reader["ESTADO_ROL"]) ? false : Convert.ToBoolean(reader["ESTADO_ROL"].ToString()),
                         };
                     }
                 }

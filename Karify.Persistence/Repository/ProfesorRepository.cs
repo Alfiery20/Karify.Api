@@ -29,8 +29,8 @@ namespace Karify.Persistence.Repository
                 AgregarProfesorCommandDTO response = new();
                 DynamicParameters parameters = new DynamicParameters();
 
-                parameters.Add("@pemail", command.Nombre, DbType.String, ParameterDirection.Input);
-                parameters.Add("@pNombre", command.Emeal, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pNombre", command.Nombre, DbType.String, ParameterDirection.Input);
+                parameters.Add("@pemail", command.Emeal, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoPaterno", command.ApellidoPaterno, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pApellidoMaterno", command.ApellidoMaterno, DbType.String, ParameterDirection.Input);
                 parameters.Add("@pidRol", command.IdRol, DbType.Int32, ParameterDirection.Input);

@@ -20,6 +20,7 @@ namespace Karify.Application.Autenticacion.Command.LoginGoogle
         public bool LlenarPerfil { get; set; }
         public int IdRol { get; set; }
         public string Rol { get; set; }
+        public bool EstadoRol { get; set; }
         public Menu[] Menus { get; set; }
         public string Token { get; set; }
     }
